@@ -35,18 +35,20 @@ public class GeometryLoaderCsv implements GeometryLoader {
     //****************************************
     // PUBLIC METHODS
     //****************************************
-
+    @Override
     public Collection<Point> load() {
         NumberFormat nf = NumberFormat.getInstance(Locale.GERMANY);
-        Collection<Point> pointCollection = new ArrayList<Point>();
+        Collection<Point> pointCollection = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(fileName), ';', '\'', 1)) {
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 // nextLine[] is an array of values from the line
                 try {
+                    int pointNr = Integer.parseInt(nextLine[0]);
+                    String pointName = nextLine[1];
                     Number numberX = nf.parse(nextLine[2]);
                     Number numberY = nf.parse(nextLine[3]);
-                    Point point = new Point(numberX.doubleValue(), numberY.doubleValue());
+                    Point point = new Point(pointNr,pointName,numberX.doubleValue(), numberY.doubleValue());
                     pointCollection.add(point);
                 } catch (ParseException e) {
                     e.printStackTrace();
