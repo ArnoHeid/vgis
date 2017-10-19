@@ -1,5 +1,4 @@
 import java.util.Collection;
-import java.util.List;
 
 public class GeometryProcessImpl implements GeometryProcess {
 
@@ -18,10 +17,6 @@ public class GeometryProcessImpl implements GeometryProcess {
     // INIT/CONSTRUCTOR
     //****************************************
 
-    public GeometryProcessImpl(Collection<Point> pointCollection){
-        this.pointCollection = pointCollection;
-    }
-
     //****************************************
     // GETTER/SETTER
     //****************************************
@@ -29,6 +24,12 @@ public class GeometryProcessImpl implements GeometryProcess {
     //****************************************
     // PUBLIC METHODS
     //****************************************
+
+
+    @Override
+    public void setCollection(Collection<Point> pointCollection) {
+        this.pointCollection = pointCollection;
+    }
 
     @Override
     public Point getCenter() {

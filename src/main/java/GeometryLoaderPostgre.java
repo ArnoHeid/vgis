@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Collection;
 import java.sql.*;
 import java.util.Properties;
@@ -12,11 +13,15 @@ public class GeometryLoaderPostgre implements GeometryLoader{
     // VARIABLES
     //****************************************
 
+    private String url;
+    private Properties props;
+
     //****************************************
     // INIT/CONSTRUCTOR
     //****************************************
-    public GeometryLoaderPostgre() {
-
+    public GeometryLoaderPostgre(String url, Properties props) {
+        this.props = props;
+        this.url = url;
     }
     //****************************************
     // GETTER/SETTER
@@ -33,29 +38,25 @@ public class GeometryLoaderPostgre implements GeometryLoader{
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        String url = "jdbc:postgresql://localhost/test";
-        Properties props = new Properties();
-        props.setProperty("user","fred");
-        props.setProperty("password","secret");
-        props.setProperty("ssl","true");
-        try(Connection conn = DriverManager.getConnection(url, props);) {
+        Collection<Point> points = new ArrayList<>();
+        try(Connection conn = DriverManager.getConnection(url, props)) {
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM mytable WHERE columnfoo = 500");
+            ResultSet rs = st.executeQuery("SELECT * FROM poi");
             while (rs.next()) {
-                System.out.print("Column 1 returned ");
-                System.out.println(rs.getString(1));
+                int pointNr = rs.getInt(1);
+                String pointName  = rs.getString(2);
+                double x = rs.getDouble(3);
+                double y = rs.getDouble(4);
+                points.add(new Point(pointNr,pointName,x,y));
             }
             rs.close();
             st.close();
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
 
-        return null;
+        return points;
     }
 
     //****************************************
