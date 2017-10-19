@@ -64,7 +64,9 @@ public class GeometryLoaderPostgre implements GeometryLoader{
     //****************************************
     private PreparedStatement creatprepStatement(Connection con) throws SQLException {
         String sql = "SELECT * FROM poi";
-        return con.prepareStatement(sql);
+        PreparedStatement ps = con.prepareStatement(sql);
+        //ps.setInt(1,1);
+        return ps;
     }
     //****************************************
     // INNER CLASSES
