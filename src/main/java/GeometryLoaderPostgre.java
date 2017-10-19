@@ -39,9 +39,11 @@ public class GeometryLoaderPostgre implements GeometryLoader{
             e.printStackTrace();
         }
         Collection<Point> points = new ArrayList<>();
-        try(Connection conn = DriverManager.getConnection(url, props)) {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM poi");
+        try(Connection conn = DriverManager.getConnection(url, props);
+            //Statement st = conn.createStatement();
+            PreparedStatement ps = creatprepStatement(conn);
+            ResultSet rs = ps.executeQuery()
+            ) {
             while (rs.next()) {
                 int pointNr = rs.getInt(1);
                 String pointName  = rs.getString(2);
@@ -49,8 +51,6 @@ public class GeometryLoaderPostgre implements GeometryLoader{
                 double y = rs.getDouble(4);
                 points.add(new Point(pointNr,pointName,x,y));
             }
-            rs.close();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,10 @@ public class GeometryLoaderPostgre implements GeometryLoader{
     //****************************************
     // PRIVATE METHODS
     //****************************************
-
+    private PreparedStatement creatprepStatement(Connection con) throws SQLException {
+        String sql = "SELECT * FROM poi";
+        return con.prepareStatement(sql);
+    }
     //****************************************
     // INNER CLASSES
     //****************************************
